@@ -4,6 +4,7 @@ import com.ead.authuser.adapter.repository.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Getter
+@ToString
 @JsonInclude(JsonInclude.Include.NON_NULL) // toda serialização atributos nulos serão ocultados na saída
 public class UserDTO {
 
@@ -64,4 +66,5 @@ public class UserDTO {
     public static UserDTO convert(UserEntity userEntity) {
         return new UserDTO(userEntity);
     }
+
 }

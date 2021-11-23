@@ -3,6 +3,7 @@ package com.ead.authuser.adapter.controllers;
 import com.ead.authuser.application.model.UserAuthDTO;
 import com.ead.authuser.application.model.UserDTO;
 import com.ead.authuser.application.services.UserService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> createUser(@RequestBody UserAuthDTO userAuthDTO) {
+    public ResponseEntity<?> createUser(@RequestBody
+                                        @JsonView(UserAuthDTO.UserView.RegistrationPost.class)
+                                                UserAuthDTO userAuthDTO) {
 
         if (userService.existsUsername(userAuthDTO.getUsername()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");

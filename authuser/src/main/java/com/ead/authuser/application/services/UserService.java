@@ -20,4 +20,10 @@ public interface UserService {
     boolean existsUsername(String username);
 
     boolean existsEmail(String email);
+
+    Optional<UserDTO> updateUser(UUID userId, UserAuthDTO userPut);
+
+    Optional<UserDTO> updatePassword(UUID userId, UserAuthDTO passwordPut);
+
+    Optional<UserDTO> updateImage(UUID userId, UserAuthDTO imagePut);
 }
