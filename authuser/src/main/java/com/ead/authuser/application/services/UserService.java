@@ -1,15 +1,17 @@
 package com.ead.authuser.application.services;
 
+import com.ead.authuser.adapter.specifications.SpecificationTemplate;
 import com.ead.authuser.application.model.UserAuthDTO;
 import com.ead.authuser.application.model.UserDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
 
-    List<UserDTO> getAllUsers();
+    Page<UserDTO> getAllUsers(SpecificationTemplate.UserSpec spec, Pageable pageable);
 
     Optional<UserDTO> getUser(UUID userId);
 

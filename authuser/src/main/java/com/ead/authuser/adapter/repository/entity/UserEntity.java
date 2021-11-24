@@ -26,6 +26,7 @@ public class UserEntity implements Serializable {
 
     @Id
     @Setter(AccessLevel.NONE)
+    @Column(name = "userId")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID userId;
 
@@ -40,10 +41,10 @@ public class UserEntity implements Serializable {
     private String password;
 
     @JsonIgnore
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 255, name = "oldPassword")
     private String oldPassword;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, length = 150, name = "fullName")
     private String fullName;
 
     @Column(nullable = false, name = "userStatus")
@@ -54,20 +55,20 @@ public class UserEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-    @Column(length = 20)
+    @Column(length = 20, name = "phoneNumber")
     private String phoneNumber;
 
     @Column(length = 20)
     private String cpf;
 
-    @Column
+    @Column(name = "imageUrl")
     private String imageUrl;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "creationDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime creationDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "lastUpdateDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime lastUpdateDate;
 

@@ -2,30 +2,32 @@ package com.ead.authuser.application.services.impl;
 
 import com.ead.authuser.adapter.repository.UserRepository;
 import com.ead.authuser.adapter.repository.entity.UserEntity;
+import com.ead.authuser.adapter.specifications.SpecificationTemplate;
 import com.ead.authuser.application.model.UserAuthDTO;
 import com.ead.authuser.application.model.UserDTO;
 import com.ead.authuser.application.services.UserService;
 import com.ead.authuser.application.services.excepitons.InvalidPasswordException;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 
-public class UserUseCaseImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserUseCaseImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
 
     @Override
-    public List<UserDTO> getAllUsers() {
+    public Page<UserDTO> getAllUsers(SpecificationTemplate.UserSpec spec, Pageable pageable) {
 
-        List<UserEntity> userEntities = userRepository.findAll();
+        Page<UserEntity> userEntities = userRepository.findAll(spec, pageable);
 
         return UserDTO.convert(userEntities);
 

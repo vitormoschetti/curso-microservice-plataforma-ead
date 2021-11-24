@@ -1,14 +1,21 @@
 package com.ead.authuser.adapter.controllers;
 
+import com.ead.authuser.adapter.specifications.SpecificationTemplate;
 import com.ead.authuser.application.model.UserAuthDTO;
 import com.ead.authuser.application.model.UserDTO;
 import com.ead.authuser.application.services.UserService;
 import com.ead.authuser.application.services.excepitons.InvalidPasswordException;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,13 +31,16 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<?> getAllUsers(SpecificationTemplate.UserSpec spec,
+            @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        if (userService.getAllUsers().isEmpty())
+        Page<UserDTO> userDTOPage = userService.getAllUsers(spec, pageable);
+
+        if (userDTOPage.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Users not found");
 
 
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
+        return ResponseEntity.status(HttpStatus.OK).body(userDTOPage);
     }
 
     @GetMapping("/{userId}")
@@ -58,7 +68,8 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable UUID userId,
-                                        @RequestBody @JsonView(UserAuthDTO.UserView.UserPut.class) UserAuthDTO userPut) {
+                                        @RequestBody @Validated(UserAuthDTO.UserView.UserPut.class)
+                                        @JsonView(UserAuthDTO.UserView.UserPut.class) UserAuthDTO userPut) {
 
         Optional<UserDTO> userDTOOptional = userService.updateUser(userId, userPut);
 
@@ -71,7 +82,8 @@ public class UserController {
 
     @PutMapping("/{userId}/password")
     public ResponseEntity<?> updatePassword(@PathVariable UUID userId,
-                                            @RequestBody @JsonView(UserAuthDTO.UserView.PasswordPut.class) UserAuthDTO passwordPut) {
+                                            @RequestBody @Validated(UserAuthDTO.UserView.PasswordPut.class)
+                                            @JsonView(UserAuthDTO.UserView.PasswordPut.class) UserAuthDTO passwordPut) {
 
         try {
             Optional<UserDTO> userDTOOptional = userService.updatePassword(userId, passwordPut);
@@ -88,7 +100,8 @@ public class UserController {
 
     @PutMapping("/{userId}/image")
     public ResponseEntity<?> updateImage(@PathVariable UUID userId,
-                                         @RequestBody @JsonView(UserAuthDTO.UserView.ImagePut.class) UserAuthDTO imagePut) {
+                                         @RequestBody @Validated(UserAuthDTO.UserView.ImagePut.class)
+                                         @JsonView(UserAuthDTO.UserView.ImagePut.class) UserAuthDTO imagePut) {
 
         Optional<UserDTO> userDTOOptional = userService.updateImage(userId, imagePut);
 

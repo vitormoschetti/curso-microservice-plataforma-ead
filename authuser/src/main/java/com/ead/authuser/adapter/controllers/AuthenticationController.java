@@ -6,7 +6,10 @@ import com.ead.authuser.application.services.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -21,7 +24,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> createUser(@RequestBody
+    public ResponseEntity<?> createUser(@RequestBody @Validated(UserAuthDTO.UserView.RegistrationPost.class)
                                         @JsonView(UserAuthDTO.UserView.RegistrationPost.class)
                                                 UserAuthDTO userAuthDTO) {
 

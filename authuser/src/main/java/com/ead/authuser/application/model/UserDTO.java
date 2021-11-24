@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,9 +51,14 @@ public class UserDTO {
     }
 
 
-    public static List<UserDTO> convert(List<UserEntity> userEntities) {
+    public static Page<UserDTO> convert(Page<UserEntity> userEntities) {
 
-        return userEntities.stream().map(userEntity -> new UserDTO(userEntity)).collect(Collectors.toList());
+        List<UserDTO> userDTOS = userEntities.stream().map(userEntity -> new UserDTO(userEntity)).collect(Collectors.toList());
+
+
+        Page<UserDTO> dtos = new PageImpl<>(userDTOS);
+
+        return dtos;
     }
 
     public static Optional<UserDTO> convert(Optional<UserEntity> userEntity) {
