@@ -20,13 +20,12 @@ import java.util.UUID;
 @Table(name = "TB_USERS")
 public class UserEntity implements Serializable {
 
-    // TODO regex para formatar phone e cpf
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Setter(AccessLevel.NONE)
     @Column(name = "userId")
+    @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID userId;
 
@@ -47,12 +46,12 @@ public class UserEntity implements Serializable {
     @Column(nullable = false, length = 150, name = "fullName")
     private String fullName;
 
-    @Column(nullable = false, name = "userStatus")
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "userStatus")
     private UserStatus userStatus;
 
-    @Column(nullable = false, name = "userType")
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "userType")
     private UserType userType;
 
     @Column(length = 20, name = "phoneNumber")

@@ -10,11 +10,12 @@ import com.ead.authuser.application.services.excepitons.InvalidPasswordException
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
-
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
