@@ -12,7 +12,8 @@
     <artifactId>authuser</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>authuser</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Service AuthUser</description>
+
     <properties>
         <java.version>11</java.version>
         <specification.resolver>2.6.2</specification.resolver>
@@ -28,6 +29,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
 
         <dependency>

@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,13 +31,12 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> getAllUsers(SpecificationTemplate.UserSpec spec,
-            @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
+                                         @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<UserDTO> userDTOPage = userService.getAllUsers(spec, pageable);
 
         if (userDTOPage.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Users not found");
-
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTOPage);
     }
