@@ -1,6 +1,6 @@
-package com.ead.course.adapter.repository;
+package com.ead.course.adapters.repository;
 
-import com.ead.course.adapter.repository.entity.CourseEntity;
+import com.ead.course.adapters.repository.entity.CourseEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

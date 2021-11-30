@@ -1,15 +1,21 @@
-package com.ead.course.adapter.repository.entity;
+package com.ead.course.adapters.repository.entity;
 
+import com.ead.course.application.model.CourseDTO;
 import com.ead.course.application.model.enums.CourseLevel;
 import com.ead.course.application.model.enums.CourseStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -50,8 +56,26 @@ public class CourseEntity implements Serializable {
     @Column(nullable = false, name = "courseLevel")
     private CourseLevel courseLevel;
 
-
+    @Column(nullable = false, name = "userInstructor")
     private UUID userInstructor;
 
+    @Fetch(FetchMode.SUBSELECT)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    private Set<ModuleEntity> modules;
 
+    public CourseEntity() {
+        creationDate = LocalDateTime.now(ZoneId.of("UTC"));
+        lastUpdateDate = LocalDateTime.now(ZoneId.of("UTC"));
+    }
+
+    public void update(CourseDTO dto) {
+        name = dto.getName();
+        description = dto.getDescription();
+        imageUrl = dto.getImageUrl();
+        courseStatus = dto.getCourseStatus();
+        courseLevel = dto.getCourseLevel();
+        userInstructor = dto.getUserInstructor();
+        lastUpdateDate = LocalDateTime.now(ZoneId.of("UTC"));
+    }
 }

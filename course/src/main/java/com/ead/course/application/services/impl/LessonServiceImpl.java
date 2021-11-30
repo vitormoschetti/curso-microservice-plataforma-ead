@@ -1,6 +1,6 @@
 package com.ead.course.application.services.impl;
 
-import com.ead.course.adapter.repository.LessonRepository;
+import com.ead.course.adapters.repository.LessonRepository;
 import com.ead.course.application.services.LessonService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
