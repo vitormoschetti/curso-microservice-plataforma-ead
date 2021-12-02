@@ -1,12 +1,13 @@
 package com.ead.course.application.model;
 
-import com.ead.course.adapters.repository.entity.CourseEntity;
+import com.ead.course.adapter.repository.entity.CourseEntity;
 import com.ead.course.application.model.enums.CourseLevel;
 import com.ead.course.application.model.enums.CourseStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.domain.Page;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -49,7 +50,7 @@ public class CourseDTO {
         return new CourseDTO(e.getName(), e.getDescription(), e.getImageUrl(), e.getCourseStatus(), e.getUserInstructor(), e.getCourseLevel());
     }
 
-    public static List<CourseDTO> convert(List<CourseEntity> courseEntities) {
+    public static List<CourseDTO> convert(Page<CourseEntity> courseEntities) {
         return courseEntities.stream().map(CourseDTO::convert).collect(Collectors.toList());
     }
 }

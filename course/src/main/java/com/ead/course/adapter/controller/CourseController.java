@@ -1,8 +1,12 @@
-package com.ead.course.adapters.controllers;
+package com.ead.course.adapter.controller;
 
+import com.ead.course.adapter.specification.SpecificationTemplate;
 import com.ead.course.application.model.CourseDTO;
 import com.ead.course.application.services.CourseService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,7 +18,7 @@ import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/course")
+@RequestMapping("/courses")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CourseController {
 
@@ -51,12 +55,14 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseDTO>> getAllCourses() {
-        return ResponseEntity.status(HttpStatus.OK).body(courseService.getAll());
+    public ResponseEntity<List<CourseDTO>> getAllCourses(SpecificationTemplate.CourseSpec spec,
+                                                         @PageableDefault(page = 0, size = 10, sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(courseService.getAll(spec, pageable));
     }
 
     @GetMapping("/courseId")
-    public ResponseEntity<?> getAllCourses(@PathVariable UUID courseId) {
+    public ResponseEntity<?> getCourses(@PathVariable UUID courseId) {
 
         Optional<CourseDTO> courseDTOOptional = courseService.get(courseId);
 

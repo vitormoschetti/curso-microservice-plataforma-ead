@@ -1,4 +1,4 @@
-package com.ead.course.adapters.repository.entity;
+package com.ead.course.adapter.repository.entity;
 
 import com.ead.course.application.model.CourseDTO;
 import com.ead.course.application.model.enums.CourseLevel;
@@ -76,6 +76,10 @@ public class CourseEntity implements Serializable {
         courseStatus = dto.getCourseStatus();
         courseLevel = dto.getCourseLevel();
         userInstructor = dto.getUserInstructor();
+        lastUpdateDate = LocalDateTime.now(ZoneId.of("UTC"));
+    }
+
+    public void update() {
         lastUpdateDate = LocalDateTime.now(ZoneId.of("UTC"));
     }
 }

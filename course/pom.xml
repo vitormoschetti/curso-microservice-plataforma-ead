@@ -12,10 +12,13 @@
     <artifactId>course</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>course</name>
-    <description>course</description>
+    <description>Service Course</description>
+
     <properties>
         <java.version>11</java.version>
+        <specification.resolver>2.6.2</specification.resolver>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -54,6 +57,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>net.kaczmarzyk</groupId>
+            <artifactId>specification-arg-resolver</artifactId>
+            <version>${specification.resolver}</version>
         </dependency>
 
     </dependencies>
