@@ -12,8 +12,7 @@ import java.util.UUID;
 
 public interface LessonRepository extends JpaRepository<LessonEntity, UUID>, JpaSpecificationExecutor<LessonEntity> {
 
-    @Query(value = "SELECT * FROM TB_LESSONS WHERE module_moduleId =: moduleId", nativeQuery = true)
-    List<LessonEntity> findByAllLessonsIntoModule(UUID moduleId);
+    List<LessonEntity> findAllByModule_ModuleId(UUID moduleId);
 
     Optional<LessonEntity> findByModule_ModuleIdAndLessonId(@Param("moduleId") UUID moduleId, @Param("lessonId") UUID lessonId);
 

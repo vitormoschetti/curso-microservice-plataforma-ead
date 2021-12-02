@@ -36,7 +36,7 @@ public class ModuleServiceImpl implements ModuleService {
         if (moduleEntityOptional.isEmpty())
             return Optional.empty();
 
-        List<LessonEntity> lessons = lessonRepository.findByAllLessonsIntoModule(moduleId);
+        List<LessonEntity> lessons = lessonRepository.findAllByModule_ModuleId(moduleId);
         if (!lessons.isEmpty()) {
             lessonRepository.deleteAll(lessons);
         }

@@ -12,8 +12,8 @@ import com.ead.course.application.services.CourseService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -42,10 +42,10 @@ public class CourseServiceImpl implements CourseService {
 
         final CourseEntity courseEntity = courseEntityOptional.get();
 
-        List<ModuleEntity> modules = moduleRepository.findAllModulesIntoCourse(courseEntity.getCourseId());
+        List<ModuleEntity> modules = moduleRepository.findAllByCourse_CourseId(courseEntity.getCourseId());
         if (!modules.isEmpty()) {
             for (ModuleEntity module : modules) {
-                List<LessonEntity> lessons = lessonRepository.findByAllLessonsIntoModule(module.getModuleId());
+                List<LessonEntity> lessons = lessonRepository.findAllByModule_ModuleId(module.getModuleId());
                 if (!lessons.isEmpty()) {
                     lessonRepository.deleteAll(lessons);
                 }
@@ -99,7 +99,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseDTO> getAll(SpecificationTemplate.CourseSpec spec, Pageable pageable) {
+    public PageImpl<CourseDTO> getAll(SpecificationTemplate.CourseSpec spec, Pageable pageable) {
         Page<CourseEntity> courseRepositoryAll = courseRepository.findAll(spec, pageable);
         return CourseDTO.convert(courseRepositoryAll);
     }

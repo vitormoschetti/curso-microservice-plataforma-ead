@@ -47,7 +47,7 @@ public class LessonController {
         Optional<LessonDTO> lessonDTOOptional = lessonService.delete(moduleId, lessonId);
 
         if (lessonDTOOptional.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson not found for course");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson not found for module");
 
         return ResponseEntity.status(HttpStatus.OK).body("Lesson deleted successfully");
     }

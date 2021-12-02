@@ -20,6 +20,7 @@ import java.util.UUID;
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "TB_MODULES")
 public class ModuleEntity implements Serializable {
 

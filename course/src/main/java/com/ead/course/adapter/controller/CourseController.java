@@ -4,6 +4,7 @@ import com.ead.course.adapter.specification.SpecificationTemplate;
 import com.ead.course.application.model.CourseDTO;
 import com.ead.course.application.services.CourseService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,7 +41,7 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK).body("Course deleted successfully");
     }
 
-    @PutMapping("/{courseId")
+    @PutMapping("/{courseId}")
     public ResponseEntity<?> updateCourse(@PathVariable(value = "courseId") UUID courseId,
                                           @RequestBody @Validated CourseDTO courseDTO) {
 
@@ -55,13 +55,13 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseDTO>> getAllCourses(SpecificationTemplate.CourseSpec spec,
-                                                         @PageableDefault(page = 0, size = 10, sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<PageImpl<CourseDTO>> getAllCourses(SpecificationTemplate.CourseSpec spec,
+                                                             @PageableDefault(page = 0, size = 10, sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable) {
 
         return ResponseEntity.status(HttpStatus.OK).body(courseService.getAll(spec, pageable));
     }
 
-    @GetMapping("/courseId")
+    @GetMapping("/{courseId}")
     public ResponseEntity<?> getCourses(@PathVariable UUID courseId) {
 
         Optional<CourseDTO> courseDTOOptional = courseService.get(courseId);

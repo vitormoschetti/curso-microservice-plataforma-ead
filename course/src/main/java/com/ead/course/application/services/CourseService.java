@@ -3,10 +3,9 @@ package com.ead.course.application.services;
 import com.ead.course.adapter.repository.entity.CourseEntity;
 import com.ead.course.adapter.specification.SpecificationTemplate;
 import com.ead.course.application.model.CourseDTO;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,7 +17,7 @@ public interface CourseService {
 
     Optional<CourseDTO> update(UUID courseId, CourseDTO courseDTO);
 
-    List<CourseDTO> getAll(SpecificationTemplate.CourseSpec spec, Pageable pageable);
+    PageImpl<CourseDTO> getAll(SpecificationTemplate.CourseSpec spec, Pageable pageable);
 
     Optional<CourseDTO> get(UUID courseId);
 
