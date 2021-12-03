@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -41,7 +42,10 @@ public class LessonDTO {
         return new LessonDTO(lessonEntity);
     }
 
-    public static List<LessonDTO> convert(Page<LessonEntity> lessonEntities) {
-        return lessonEntities.stream().map(LessonDTO::new).collect(Collectors.toList());
+    public static PageImpl<LessonDTO> convert(Page<LessonEntity> lessonEntities) {
+
+        List<LessonDTO> lessonDTOS = lessonEntities.stream().map(LessonDTO::new).collect(Collectors.toList());
+
+        return new PageImpl<LessonDTO>(lessonDTOS);
     }
 }

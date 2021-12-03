@@ -10,6 +10,7 @@ import com.ead.course.application.services.ModuleService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -69,12 +70,12 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<LessonDTO> getAll(Specification<LessonEntity> specification, Pageable pageable) {
+    public PageImpl<LessonDTO> getAll(Specification<LessonEntity> specification, Pageable pageable) {
 
         Page<LessonEntity> lessonEntities = lessonRepository.findAll(specification, pageable);
 
         if(lessonEntities.isEmpty())
-            return List.of();
+            return new PageImpl<>(null);
 
         return LessonDTO.convert(lessonEntities);
     }

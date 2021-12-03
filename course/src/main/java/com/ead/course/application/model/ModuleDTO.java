@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -38,7 +39,8 @@ public class ModuleDTO {
         return new ModuleDTO(m);
     }
 
-    public static List<ModuleDTO> convert(Page<ModuleEntity> moduleEntities) {
-        return moduleEntities.stream().map(ModuleDTO::new).collect(Collectors.toList());
+    public static PageImpl<ModuleDTO> convert(Page<ModuleEntity> moduleEntities) {
+        List<ModuleDTO> moduleDTOS = moduleEntities.stream().map(ModuleDTO::new).collect(Collectors.toList());
+        return new PageImpl<ModuleDTO>(moduleDTOS);
     }
 }

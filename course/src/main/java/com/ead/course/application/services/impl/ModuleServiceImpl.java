@@ -11,6 +11,7 @@ import com.ead.course.application.services.ModuleService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -53,12 +54,12 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
-    public List<ModuleDTO> getAll(Specification<ModuleEntity> specification, Pageable pageable) {
+    public PageImpl<ModuleDTO> getAll(Specification<ModuleEntity> specification, Pageable pageable) {
 
         Page<ModuleEntity> moduleEntities = moduleRepository.findAll(specification, pageable);
 
         if (moduleEntities.isEmpty())
-            return List.of();
+            return new PageImpl<>(null);
 
         return ModuleDTO.convert(moduleEntities);
     }

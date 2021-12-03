@@ -6,6 +6,7 @@ import com.ead.authuser.application.model.UserDTO;
 import com.ead.authuser.application.services.UserService;
 import com.ead.authuser.application.services.excepitons.InvalidPasswordException;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.UUID;
 
+@Log4j2
 @RestController
 @RequestMapping("/users")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -33,11 +35,15 @@ public class UserController {
     public ResponseEntity<?> getAllUsers(SpecificationTemplate.UserSpec spec,
                                          @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
 
+
         Page<UserDTO> userDTOPage = userService.getAllUsers(spec, pageable);
 
-        if (userDTOPage.isEmpty())
+        if (userDTOPage.isEmpty()) {
+            log.info("Users not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Users not found");
+        }
 
+        log.debug("Users: {}", userDTOPage.getContent());
         return ResponseEntity.status(HttpStatus.OK).body(userDTOPage);
     }
 
@@ -46,9 +52,12 @@ public class UserController {
 
         Optional<UserDTO> userDTOOptional = userService.getUser(userId);
 
-        if (userDTOOptional.isEmpty())
+        if (userDTOOptional.isEmpty()) {
+            log.info("Users not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
 
+        log.debug("User: {}", userDTOOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body(userDTOOptional.get());
 
     }
@@ -57,9 +66,12 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable UUID userId) {
         Optional<UserDTO> userDTOOptional = userService.delete(userId);
 
-        if (userDTOOptional.isEmpty())
+        if (userDTOOptional.isEmpty()) {
+            log.info("User not found for delete");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
 
+        log.debug("User deleted successfully {}", userId);
         return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully");
 
     }
@@ -71,9 +83,14 @@ public class UserController {
 
         Optional<UserDTO> userDTOOptional = userService.updateUser(userId, userPut);
 
-        if (userDTOOptional.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        log.debug("Parameters for delete user: id {}, body {}", userId, userPut);
 
+        if (userDTOOptional.isEmpty()) {
+            log.info("User not found for update");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        log.debug("User update successfully {}", userDTOOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body(userDTOOptional.get());
 
     }

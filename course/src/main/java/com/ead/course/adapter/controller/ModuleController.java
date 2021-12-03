@@ -6,6 +6,7 @@ import com.ead.course.application.model.ModuleDTO;
 import com.ead.course.application.services.CourseService;
 import com.ead.course.application.services.ModuleService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -14,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -67,9 +67,9 @@ public class ModuleController {
     }
 
     @GetMapping("/{courseId}/modules")
-    public ResponseEntity<List<ModuleDTO>> getAll(@PathVariable UUID courseId,
-                                                  SpecificationTemplate.ModuleSpec spec,
-                                                  @PageableDefault(page = 0, size = 10, sort = "moduleId", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<PageImpl<ModuleDTO>> getAll(@PathVariable UUID courseId,
+                                                      SpecificationTemplate.ModuleSpec spec,
+                                                      @PageableDefault(page = 0, size = 10, sort = "moduleId", direction = Sort.Direction.ASC) Pageable pageable) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(moduleService.getAll(SpecificationTemplate.moduleCourseId(courseId).and(spec), pageable));
