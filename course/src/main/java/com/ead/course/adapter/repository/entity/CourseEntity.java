@@ -64,6 +64,12 @@ public class CourseEntity implements Serializable {
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     private Set<ModuleEntity> modules;
 
+    @Column(name = "coursesUsers")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    private Set<CourseUserEntity> coursesUsers;
+
+
     public CourseEntity() {
         creationDate = LocalDateTime.now(ZoneId.of("UTC"));
         lastUpdateDate = LocalDateTime.now(ZoneId.of("UTC"));

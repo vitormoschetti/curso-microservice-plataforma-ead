@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -100,6 +101,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public PageImpl<CourseDTO> getAll(SpecificationTemplate.CourseSpec spec, Pageable pageable) {
+        Page<CourseEntity> courseRepositoryAll = courseRepository.findAll(spec, pageable);
+        return CourseDTO.convert(courseRepositoryAll);
+    }
+
+    @Override
+    public PageImpl<CourseDTO> getAll(Specification<CourseEntity> spec, Pageable pageable) {
         Page<CourseEntity> courseRepositoryAll = courseRepository.findAll(spec, pageable);
         return CourseDTO.convert(courseRepositoryAll);
     }

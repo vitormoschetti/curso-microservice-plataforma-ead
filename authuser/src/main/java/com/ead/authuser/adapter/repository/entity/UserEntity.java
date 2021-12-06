@@ -5,6 +5,7 @@ import com.ead.authuser.application.model.enums.UserStatus;
 import com.ead.authuser.application.model.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -70,6 +72,11 @@ public class UserEntity implements Serializable {
     @Column(nullable = false, name = "lastUpdateDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime lastUpdateDate;
+
+    @Column(name = "userscourses")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Set<UserCourseEntity> usersCourses;
 
     public void newComplete() {
         this.setUserStatus(UserStatus.ACTIVE);

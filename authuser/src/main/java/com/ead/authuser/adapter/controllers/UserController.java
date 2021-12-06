@@ -33,10 +33,16 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> getAllUsers(SpecificationTemplate.UserSpec spec,
-                                         @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
+                                         @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
+                                         @RequestParam(required = false) UUID courseId) {
 
 
-        Page<UserDTO> userDTOPage = userService.getAllUsers(spec, pageable);
+        Page<UserDTO> userDTOPage = null;
+
+        if (courseId == null)
+            userDTOPage = userService.getAllUsers(spec, pageable);
+        else
+            userDTOPage = userService.getAllUsers(SpecificationTemplate.userCourseId(courseId).and(spec), pageable);
 
         if (userDTOPage.isEmpty()) {
             log.info("Users not found");

@@ -10,6 +10,7 @@ import com.ead.authuser.application.services.excepitons.InvalidPasswordException
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,6 +33,14 @@ public class UserServiceImpl implements UserService {
 
         return UserDTO.convert(userEntities);
 
+    }
+
+    @Override
+    public Page<UserDTO> getAllUsers(Specification<UserEntity> spec, Pageable pageable) {
+
+        Page<UserEntity> userEntities = userRepository.findAll(spec, pageable);
+
+        return UserDTO.convert(userEntities);
     }
 
     @Override
