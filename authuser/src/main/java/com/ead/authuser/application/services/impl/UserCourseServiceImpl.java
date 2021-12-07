@@ -15,7 +15,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserCourseServiceImpl implements UserCourseService {
 
-    private final UserCourseRepository userCourseRepository;
     private final CourseClient courseClient;
 
     @Override
