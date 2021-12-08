@@ -1,6 +1,8 @@
 package com.ead.authuser.application.services.impl;
 
+import com.ead.authuser.adapter.repository.UserCourseRepository;
 import com.ead.authuser.adapter.repository.UserRepository;
+import com.ead.authuser.adapter.repository.entity.UserCourseEntity;
 import com.ead.authuser.adapter.repository.entity.UserEntity;
 import com.ead.authuser.adapter.specifications.SpecificationTemplate;
 import com.ead.authuser.application.model.UserAuthDTO;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,9 +24,11 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserCourseRepository userCourseRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserCourseRepository userCourseRepository) {
         this.userRepository = userRepository;
+        this.userCourseRepository = userCourseRepository;
     }
 
 
@@ -52,12 +58,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Optional<UserDTO> delete(UUID userDTO) {
 
         Optional<UserEntity> userEntityOptional = userRepository.findById(userDTO);
 
         if (userEntityOptional.isEmpty())
             return Optional.empty();
+
+        List<UserCourseEntity> userCourseEntities = userCourseRepository.findAllByUserUserId(userEntityOptional.get().getUserId());
+
+        if(!userCourseEntities.isEmpty())
+            userCourseRepository.deleteAll(userCourseEntities);
 
         userRepository.delete(userEntityOptional.get());
         return UserDTO.convert(userEntityOptional);

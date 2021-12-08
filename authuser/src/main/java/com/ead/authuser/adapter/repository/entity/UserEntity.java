@@ -118,4 +118,9 @@ public class UserEntity implements Serializable {
     public UserCourseEntity converterParaUserCourse(UUID courseId) {
         return new UserCourseEntity(null, this, courseId );
     }
+
+    public void promoveParaInstrutor() {
+        this.lastUpdateDate = generateCurrentDate();
+        this.userType = UserType.INSTRUCTOR;
+    }
 }

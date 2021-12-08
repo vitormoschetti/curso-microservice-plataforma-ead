@@ -1,6 +1,7 @@
 package com.ead.course.adapter.controller;
 
 import com.ead.course.adapter.specification.SpecificationTemplate;
+import com.ead.course.adapter.validation.CourseValidator;
 import com.ead.course.application.model.CourseDTO;
 import com.ead.course.application.services.CourseService;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +25,16 @@ import java.util.UUID;
 public class CourseController {
 
     private final CourseService courseService;
+    private final CourseValidator courseValidator;
 
     @PostMapping
-    public ResponseEntity<CourseDTO> createCourse(@RequestBody @Validated CourseDTO courseDTO) {
+    public ResponseEntity<?> createCourse(@RequestBody CourseDTO courseDTO, Errors errors) {
+
+        courseValidator.validate(courseDTO, errors);
+
+        if(errors.hasErrors())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.getAllErrors());
+
         courseService.create(courseDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(courseDTO);
     }

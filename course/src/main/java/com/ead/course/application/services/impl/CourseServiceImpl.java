@@ -1,9 +1,11 @@
 package com.ead.course.application.services.impl;
 
 import com.ead.course.adapter.repository.CourseRepository;
+import com.ead.course.adapter.repository.CourseUserRepository;
 import com.ead.course.adapter.repository.LessonRepository;
 import com.ead.course.adapter.repository.ModuleRepository;
 import com.ead.course.adapter.repository.entity.CourseEntity;
+import com.ead.course.adapter.repository.entity.CourseUserEntity;
 import com.ead.course.adapter.repository.entity.LessonEntity;
 import com.ead.course.adapter.repository.entity.ModuleEntity;
 import com.ead.course.adapter.specification.SpecificationTemplate;
@@ -29,6 +31,7 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final ModuleRepository moduleRepository;
     private final LessonRepository lessonRepository;
+    private final CourseUserRepository courseUserRepository;
 
 
     @Override
@@ -53,6 +56,11 @@ public class CourseServiceImpl implements CourseService {
             }
             moduleRepository.deleteAll(modules);
         }
+
+        List<CourseUserEntity> courseUserEntities = courseUserRepository.findAllByCourse_CourseId(courseEntity.getCourseId());
+        if(!courseUserEntities.isEmpty())
+            courseUserRepository.deleteAll(courseUserEntities);
+
         courseRepository.delete(courseEntity);
 
         return Optional.of(new CourseDTO());
