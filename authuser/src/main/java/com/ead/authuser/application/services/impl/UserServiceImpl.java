@@ -142,4 +142,9 @@ public class UserServiceImpl implements UserService {
         return Optional.of(UserDTO.convert(userEntity));
     }
 
+    @Override
+    public Optional<UserEntity> getEntity(UUID userId) {
+        return userRepository.findById(userId);
+    }
+
 }

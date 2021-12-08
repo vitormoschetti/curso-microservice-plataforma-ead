@@ -114,4 +114,8 @@ public class UserEntity implements Serializable {
     public void updateImage(UserAuthDTO imagePut) {
         this.imageUrl = imagePut.getImageUrl();
     }
+
+    public UserCourseEntity converterParaUserCourse(UUID courseId) {
+        return new UserCourseEntity(null, this, courseId );
+    }
 }

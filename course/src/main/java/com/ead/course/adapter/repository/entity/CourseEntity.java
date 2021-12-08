@@ -88,4 +88,8 @@ public class CourseEntity implements Serializable {
     public void update() {
         lastUpdateDate = LocalDateTime.now(ZoneId.of("UTC"));
     }
+
+    public CourseUserEntity convertToCourseUserModel(UUID userId) {
+        return new CourseUserEntity(null, this, userId);
+    }
 }

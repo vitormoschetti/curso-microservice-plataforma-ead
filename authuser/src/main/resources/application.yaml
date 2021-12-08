@@ -25,3 +25,8 @@ logging:
     com.ead: TRACE
     org.hibernate: INFO
     org.springframework.web: INFO
+
+ead:
+  api:
+    url:
+      course: 'http://localhost:8082'

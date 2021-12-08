@@ -2,8 +2,8 @@ package com.ead.authuser.adapter.clients;
 
 import com.ead.authuser.application.model.CourseDTO;
 import com.ead.authuser.application.model.ResponsePageDTO;
-import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,18 +18,23 @@ import java.util.UUID;
 
 @Log4j2
 @Component
-@AllArgsConstructor
 public class CourseClient {
 
     private final RestTemplate restTemplate;
+
+    private final String requestUri;
+
+    public CourseClient(RestTemplate restTemplate, @Value("${ead.api.url.course}") String requestUri) {
+        this.restTemplate = restTemplate;
+        this.requestUri = requestUri;
+    }
+
 
     public PageImpl<CourseDTO> getAllCoursesByUser(UUID userId, Pageable pageable) {
 
         List<CourseDTO> courseDTOS = null;
 
-        String REQUEST_URI = "http://localhost:8082";
-
-        String url = REQUEST_URI + "/courses?userId=" + userId + "&page=" + pageable.getPageNumber() + "&size=" + pageable.getPageSize() +
+        String url = requestUri + "/courses?userId=" + userId + "&page=" + pageable.getPageNumber() + "&size=" + pageable.getPageSize() +
                 "&sort=" + pageable.getSort().toString().replaceAll(": ", ",");
 
         log.debug("Request URL: {}", url);

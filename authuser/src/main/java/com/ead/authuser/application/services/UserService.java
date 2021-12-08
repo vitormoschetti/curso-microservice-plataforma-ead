@@ -33,4 +33,5 @@ public interface UserService {
 
     Optional<UserDTO> updateImage(UUID userId, UserAuthDTO imagePut);
 
+    Optional<UserEntity> getEntity(UUID userId);
 }
