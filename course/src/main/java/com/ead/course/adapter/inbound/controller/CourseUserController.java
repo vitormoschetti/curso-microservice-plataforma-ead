@@ -5,7 +5,7 @@ import com.ead.course.adapter.inbound.controller.dto.UserDTO;
 import com.ead.course.application.model.CourseModel;
 import com.ead.course.application.model.enums.UserStatus;
 import com.ead.course.application.ports.service.CourseServicePort;
-import com.ead.course.application.ports.service.CourseUserServicePort;
+import com.ead.course.application.useCase.CourseUserUseCase;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageImpl;
@@ -27,38 +27,38 @@ import java.util.UUID;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CourseUserController {
 
-    private final CourseUserServicePort courseUserServicePort;
+    private final CourseUserUseCase courseUserUseCase;
     private final CourseServicePort courseServicePort;
 
     @GetMapping("/{cursoId}/users")
-    public ResponseEntity<PageImpl<UserDTO>> buscarTodosUsuariosNoCurso(@PageableDefault(page = 0, size = 10, sort = "usuarioId", direction = Sort.Direction.ASC) Pageable pageable,
+    public ResponseEntity<PageImpl<UserDTO>> buscarTodosUsuariosNoCurso(@PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
                                                                         @PathVariable(value = "cursoId") UUID cursoId) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(courseUserServicePort.getAllUsersByCourse(cursoId, pageable));
+        return ResponseEntity.status(HttpStatus.OK).body(courseUserUseCase.getAllUsersByCourse(cursoId, pageable));
     }
 
 
     @PostMapping("/{cursoId}/users/subscription")
     public ResponseEntity<?> salvarInscricaoDoUsuarioNoCurso(@PathVariable(value = "cursoId") UUID cursoId,
-                                                          @RequestBody @Valid SubscriptionDTO subscriptionDTO) {
+                                                             @RequestBody @Valid SubscriptionDTO subscriptionDTO) {
 
         Optional<CourseModel> cursoModelOptional = courseServicePort.buscarEntidade(cursoId);
         if (cursoModelOptional.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Curso não encontrado");
 
         CourseModel courseModel = cursoModelOptional.get();
-        if (courseUserServicePort.existsByCourseAndUserId(courseModel, subscriptionDTO.getUserId())) {
+        if (courseUserUseCase.existsByCourseAndUserId(courseModel, subscriptionDTO.getUserId())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Inscrição já existe");
         }
 
-        UserDTO userDTO = courseUserServicePort.getOneUserByUserId(subscriptionDTO.getUserId());
+        UserDTO userDTO = courseUserUseCase.getOneUserByUserId(subscriptionDTO.getUserId());
 
         log.info("User: {}", userDTO);
 
         if(userDTO.getUserStatus().equals(UserStatus.BLOCKED))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuário bloqueado");
 
-        courseUserServicePort.saveAndSendSubscriptionUserInCourse(courseModel, subscriptionDTO.getUserId());
+        courseUserUseCase.saveAndSendSubscriptionUserInCourse(courseModel, subscriptionDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Inscrição criada com sucesso");
     }

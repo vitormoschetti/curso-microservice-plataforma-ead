@@ -1,5 +1,6 @@
 package com.ead.course.application.ports.service;
 
+import com.ead.course.adapter.inbound.controller.dto.SubscriptionDTO;
 import com.ead.course.adapter.inbound.controller.dto.UserDTO;
 import com.ead.course.application.model.CourseModel;
 import org.springframework.data.domain.PageImpl;
@@ -13,7 +14,7 @@ public interface CourseUserServicePort {
 
     boolean existsByCourseAndUserId(CourseModel courseModel, UUID userId);
 
-    void saveAndSendSubscriptionUserInCourse(CourseModel courseModel, UUID userId);
+    void saveAndSendSubscriptionUserInCourse(CourseModel courseModel, SubscriptionDTO userId);
 
     UserDTO getOneUserByUserId(UUID userId);
 }

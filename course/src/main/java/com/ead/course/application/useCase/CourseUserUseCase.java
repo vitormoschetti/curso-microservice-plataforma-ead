@@ -1,13 +1,14 @@
 package com.ead.course.application.useCase;
 
-import com.ead.course.adapter.outbound.clients.AuthUserClient;
+import com.ead.course.adapter.inbound.controller.dto.ResponsePageDTO;
+import com.ead.course.adapter.inbound.controller.dto.SubscriptionDTO;
 import com.ead.course.adapter.inbound.controller.dto.UserDTO;
+import com.ead.course.adapter.outbound.clients.AuthUserClientFeign;
 import com.ead.course.application.model.CourseModel;
 import com.ead.course.application.model.CourseUserModel;
 import com.ead.course.application.ports.repository.CourseUserRepositoryPort;
 import com.ead.course.application.ports.service.CourseUserServicePort;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CourseUserUseCase implements CourseUserServicePort {
 
-    private final AuthUserClient authUserClient;
+    private final AuthUserClientFeign authUserClient;
     private final CourseUserRepositoryPort courseUserRepositoryPort;
 
     @Override
-    public PageImpl<UserDTO> getAllUsersByCourse(UUID courseId, Pageable pageable) {
-        return authUserClient.buscaTodosUsuarioPorCurso(courseId, pageable);
+    public ResponsePageDTO<UserDTO> getAllUsersByCourse(UUID courseId, Pageable pageable) {
+        return (ResponsePageDTO<UserDTO>) authUserClient.getAllUsers(pageable, courseId).getBody();
     }
 
     @Override
@@ -33,16 +34,16 @@ public class CourseUserUseCase implements CourseUserServicePort {
 
     @Override
     @Transactional
-    public void saveAndSendSubscriptionUserInCourse(CourseModel courseModel, UUID userId) {
-        CourseUserModel courseUserModel = courseModel.converterParaCursoUsuarioModel(userId);
+    public void saveAndSendSubscriptionUserInCourse(CourseModel courseModel, SubscriptionDTO subscriptionDTO) {
+        CourseUserModel courseUserModel = courseModel.converterParaCursoUsuarioModel(subscriptionDTO.getUserId());
         courseUserRepositoryPort.salvar(courseUserModel);
 
-        authUserClient.postSubscriptionUserInCourse(courseModel.getCourseId(), userId);
+        authUserClient.saveSubscriptionUserInCourse(subscriptionDTO.getUserId(), subscriptionDTO);
 
     }
 
     @Override
     public UserDTO getOneUserByUserId(UUID userId) {
-        return authUserClient.buscarUmUsuarioPeloId(userId);
+        return authUserClient.getUser(userId).getBody();
     }
 }

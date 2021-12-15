@@ -15,6 +15,9 @@ import java.util.UUID;
 public class SubscriptionDTO {
 
     @NotNull
+    private UUID courseId;
+
+    @NotNull
     private UUID userId;
 
 }

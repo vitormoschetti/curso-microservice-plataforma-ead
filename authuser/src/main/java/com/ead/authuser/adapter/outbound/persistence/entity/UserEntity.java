@@ -80,6 +80,7 @@ public class UserEntity implements Serializable {
     private Set<UserCourseEntity> usersCourses;
 
     public UserEntity(UserModel u) {
+        this.userId = u.getUserId();
         this.username = u.getUsername();
         this.email = u.getEmail();
         this.password = u.getPassword();

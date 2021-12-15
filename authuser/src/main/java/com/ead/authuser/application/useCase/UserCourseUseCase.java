@@ -1,14 +1,14 @@
 package com.ead.authuser.application.useCase;
 
-import com.ead.authuser.adapter.outbound.client.CourseClient;
 import com.ead.authuser.adapter.inbound.controller.dto.CourseDTO;
+import com.ead.authuser.adapter.inbound.controller.dto.ResponsePageDTO;
 import com.ead.authuser.adapter.inbound.controller.dto.SubscriptionDTO;
+import com.ead.authuser.adapter.outbound.client.CourseClientFeign;
 import com.ead.authuser.application.model.UserCourseModel;
 import com.ead.authuser.application.model.UserModel;
 import com.ead.authuser.application.ports.repository.UserCourseRepositoryPort;
 import com.ead.authuser.application.ports.service.UserCourseServicePort;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +18,13 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserCourseUseCase implements UserCourseServicePort {
 
-    private final CourseClient courseClient;
+    private final CourseClientFeign courseClient;
     private final UserCourseRepositoryPort userCourseRepositoryPort;
 
     @Override
-    public PageImpl<CourseDTO> getAllCoursesByUser(UUID userId, Pageable pageable) {
+    public ResponsePageDTO<CourseDTO> getAllCoursesByUser(UUID userId, Pageable pageable) {
 
-        return courseClient.getAllCoursesByUser(userId, pageable);
+        return courseClient.buscarTodos(pageable, userId).getBody();
     }
 
     @Override

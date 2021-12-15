@@ -1,9 +1,10 @@
 package com.ead.course.adapter.inbound.controller.dto.validation;
 
-import com.ead.course.adapter.outbound.clients.AuthUserClient;
 import com.ead.course.adapter.inbound.controller.dto.CourseDTO;
 import com.ead.course.adapter.inbound.controller.dto.UserDTO;
+import com.ead.course.adapter.outbound.clients.AuthUserClientFeign;
 import com.ead.course.application.model.enums.UserType;
+import com.ead.course.application.ports.service.CourseUserServicePort;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -16,11 +17,11 @@ import java.util.UUID;
 public class CursoValidator implements Validator {
 
     private final Validator validator;
-    private final AuthUserClient authUserClient;
+    private final CourseUserServicePort courseUserServicePort;
 
-    public CursoValidator(@Qualifier("defaultValidator") Validator validator, AuthUserClient authUserClient) {
+    public CursoValidator(@Qualifier("defaultValidator") Validator validator, CourseUserServicePort courseUserServicePort) {
         this.validator = validator;
-        this.authUserClient = authUserClient;
+        this.courseUserServicePort = courseUserServicePort;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class CursoValidator implements Validator {
     }
 
     private void validateUserInstructor(UUID userInstructor, Errors errors) {
-        UserDTO userDTO = authUserClient.buscarUmUsuarioPeloId(userInstructor);
+        UserDTO userDTO = courseUserServicePort.getOneUserByUserId(userInstructor);
 
         if(userDTO == null) {
             errors.rejectValue("userInstructor", "UserInstructorError", "Instrutor não encontrado");

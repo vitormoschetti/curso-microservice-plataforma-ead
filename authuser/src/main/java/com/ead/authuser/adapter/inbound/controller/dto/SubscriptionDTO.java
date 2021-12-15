@@ -11,5 +11,4 @@ public class SubscriptionDTO {
     @NotNull
     private UUID courseId;
 
-
 }

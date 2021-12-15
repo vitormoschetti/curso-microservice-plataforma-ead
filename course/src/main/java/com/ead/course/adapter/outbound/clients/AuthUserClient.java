@@ -30,35 +30,6 @@ public class AuthUserClient {
         this.requestUri = requestUri;
     }
 
-    public PageImpl<UserDTO> buscaTodosUsuarioPorCurso(UUID cursoId, Pageable pageable) {
-
-        List<UserDTO> userDTOS = null;
-
-        String url = requestUri + "/users?courseId=" + cursoId + "&page=" + pageable.getPageNumber() + "&size=" + pageable.getPageSize() +
-                "&sort=" + pageable.getSort().toString().replaceAll(": ", ",");
-
-        log.debug("Request URL: {}", url);
-        log.info("Request URL: {}", url);
-
-        try {
-            final ParameterizedTypeReference<ResponsePageDTO<UserDTO>> responseType = new ParameterizedTypeReference<>() {
-            };
-
-            ResponseEntity<ResponsePageDTO<UserDTO>> result = restTemplate.exchange(url, HttpMethod.GET, null, responseType);
-
-            log.debug("Número de elementos retornados: {}", result.getBody().getContent().size());
-
-            userDTOS = result.getBody().getContent();
-
-        } catch (HttpStatusCodeException e) {
-            log.error("Error request /users {}", e);
-        }
-
-        log.info("Fim request /users com o cursoId: {}", cursoId);
-
-        return new PageImpl<>(userDTOS);
-    }
-
     public UserDTO buscarUmUsuarioPeloId(UUID usuarioId) {
 
         String url = requestUri + "/users/" + usuarioId;
